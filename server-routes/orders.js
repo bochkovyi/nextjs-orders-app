@@ -1,9 +1,8 @@
 const models  = require('../models').db;
 const express = require('express');
 const router  = express.Router();
-const users  = require('./users');
 
-router.get('/', function(req, res) {
+router.get('/1', function(req, res) {
   models.User.findAll({
     include: [ models.Task ]
   }).then(function(users) {
@@ -14,6 +13,9 @@ router.get('/', function(req, res) {
   });
 });
 
-router.use('/users', users)
+router.post('/create', function(req, res) {
+  console.log(req.body)
+  res.json({test: true})
+});
 
 module.exports = router;
