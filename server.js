@@ -13,6 +13,7 @@ const models  = require('./models').db;
 const bodyParser = require('body-parser');
 
 app.prepare().then(() => {
+  process.app = app;
   const server = express()
   initDb()
   server.use(bodyParser.urlencoded({ extended: false }))
@@ -20,29 +21,7 @@ app.prepare().then(() => {
   server.use('/orders', orders);
   server.use('/payments', payments);
 
-  // server.get('/test1', (req, res) => {
-  //   models.User.findAll({
-  //     include: [ models.Task ]
-  //   }).then(users => app.render(req, res, '/posts', { id: 'test1', users }));
-  // });
-
-  // server.get('/a', (req, res) => {
-  //   return app.render(req, res, '/b', req.query)
-  // })
-
-  // server.get('/test', (req, res) => {
-	//   console.log('yrdy')
-  //   return res.json({test: true})
-  // })
-
-  // server.get('/b', (req, res) => {
-  //   return app.render(req, res, '/a', req.query)
-  // })
-
-  // server.get('/posts/:id', (req, res) => {
-  //   return app.render(req, res, '/posts', { id: req.params.id })
-  // })
-
+  server.use(errorHandler);
   server.get('*', (req, res) => {
     return handle(req, res)
   })
@@ -52,3 +31,8 @@ app.prepare().then(() => {
     console.log(`> Ready on http://localhost:${port}`)
   })
 })
+
+function errorHandler(err, req, res, next) {
+  res.status(500);
+  res.json({error: err.message || true});
+}

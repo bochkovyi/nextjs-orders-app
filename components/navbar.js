@@ -1,5 +1,3 @@
-import Link from 'next/link'
-
 export default () => (
   <header>
     <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
@@ -9,9 +7,7 @@ export default () => (
             [{href: '/new', title: 'New order'}, {href: '/orders', title: 'All orders'}, {href: '/payments', title: 'Payments history'}]
             .map(item =>
               <li className="nav-item" key={item.title}>
-                <Link href={item.href}>
-                  <a className="nav-link">{item.title}</a>
-                </Link>
+                <a href={item.href} className="nav-link">{item.title}</a>
               </li>)
           }
         </ul>
