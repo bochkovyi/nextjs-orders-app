@@ -1,16 +1,21 @@
 import React from 'react'
 import Page from '../layouts/main'
+import Router from 'next/router'
 
-export default () => (
-  <Page>
+export default () => {
+  const onClick = (e) => {
+    e.preventDefault();
+    Router.push('/new');
+  }
+  return (<Page>
     <div className="jumbotron">
-      <h1 className="display-3">Orders app / page with no logic</h1>
-      <p className="lead">This is a simple orders app, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+      <h1 className="display-3">Orders app</h1>
+      <p className="lead">Here you can create the order and check the status</p>
       <hr className="my-4" />
-      <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+      <p>Also you have the list of payment transactions. No real payments handling, just a demo.</p>
       <p className="lead">
-        <a className="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+        <a onClick={onClick} className="btn btn-primary btn-lg" href="#" role="button">Create new order</a>
       </p>
     </div>
-  </Page>
-)
+  </Page>)
+}

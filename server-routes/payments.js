@@ -1,58 +1,23 @@
 const models  = require('../models').db;
 const express = require('express');
 const router  = express.Router();
+const catchAsyncErrors = require('../utils/catchAsyncErrors');
 
+router.get('/', catchAsyncErrors((req, res) => {
+  return models.payment.findAll({include: {model: models.order}}).then(payments => {
+    return process.app.render(req, res, '/payments', { payments })
+  })
+}));
 
-router.get('/test', function(req, res) {
-  models.User.findAll({
-    include: [ models.Task ]
-  }).then(function(users) {
-    res.json({'index': {
-      title: 'Sequelize: Express Example',
-      users: users
-    }});
-  });
-});
-
-
-router.post('/create', function(req, res) {
-  console.log('req.body', req.body)
-  models.User.create({
-    username: req.body.username
-  }).then(function() {
-    res.redirect('/');
-  });
-});
-
-router.get('/:user_id/destroy', function(req, res) {
-  models.User.destroy({
-    where: {
-      id: req.params.user_id
-    }
-  }).then(function() {
-    res.redirect('/');
-  });
-});
-
-router.post('/:user_id/tasks/create', function (req, res) {
-  console.log('req.body', req.body)
-  models.Task.create({
-    title: req.body.title,
-    UserId: req.params.user_id
-  }).then(function() {
-    res.redirect('/');
-  });
-});
-
-router.get('/:user_id/tasks/:task_id/destroy', function (req, res) {
-  models.Task.destroy({
-    where: {
-      id: req.params.task_id
-    }
-  }).then(function() {
-    res.redirect('/');
-  });
-});
-
+router.post('/pay', catchAsyncErrors(async function(req, res) {
+  const random = Math.floor(Math.random()*100);
+  const payment = await models.payment.create({
+    method: random % 2 !== 0 ? 'card' : 'transfer',
+    meta: "Slug / order name: " + req.body.meta,
+    success: random % 2 !== 0,
+    order_id: req.body.order_id
+  })
+  return res.json({status: payment.success ? 'confirmed' : 'declined'});
+}));
 
 module.exports = router;

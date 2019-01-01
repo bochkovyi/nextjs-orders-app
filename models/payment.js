@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Model.associate = function(models) {
-    models.payment.hasOne(models.order);
+    models.payment.belongsTo(models.order);
   };
 
   return Model;

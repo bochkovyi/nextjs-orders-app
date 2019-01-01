@@ -14,6 +14,7 @@ const bodyParser = require('body-parser');
 
 app.prepare().then(() => {
   process.app = app;
+  process.serverUrl = `http://localhost:${port}`;
   const server = express()
   initDb()
   server.use(bodyParser.urlencoded({ extended: false }))
@@ -28,11 +29,12 @@ app.prepare().then(() => {
 
   server.listen(port, err => {
     if (err) throw err
-    console.log(`> Ready on http://localhost:${port}`)
+    console.log(`> Ready on ${process.serverUrl}`)
   })
 })
 
 function errorHandler(err, req, res, next) {
+  console.log(err)
   res.status(500);
   res.json({error: err.message || true});
 }

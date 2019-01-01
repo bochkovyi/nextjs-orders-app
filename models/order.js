@@ -2,7 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.define('order', {
     name: DataTypes.STRING,
-    status: DataTypes.ENUM('created', 'confirmed', 'delivered', 'cancelled'),
+    status: DataTypes.ENUM('created', 'confirmed', 'delivered', 'canceled'),
     amount_cents: DataTypes.INTEGER
   },
   {
